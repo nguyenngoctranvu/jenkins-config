@@ -1,121 +1,27 @@
 jenkins:
-  agentProtocols:
-  - "JNLP4-connect"
-  - "Ping"
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
-  clouds:
-  - kubernetes:
-      containerCap: 10
-      containerCapStr: "10"
-      jenkinsTunnel: "jenkins-agent:50000"
-      jenkinsUrl: "http://jenkins:8080"
-      name: "kubernetes"
-      namespace: "jenkins-test"
-      podLabels:
-      - key: "jenkins/jenkins-jenkins-agent"
-        value: "true"
-      serverUrl: "https://kubernetes.default"
-      templates:
-      - containers:
-        - args: "^${computer.jnlpmac} ^${computer.name}"
-          envVars:
-          - envVar:
-              key: "JENKINS_URL"
-              value: "http://jenkins.jenkins-test.svc.cluster.local:8080/"
-          image: "jenkins/inbound-agent:4.6-1"
-          name: "jnlp"
-          resourceLimitCpu: "512m"
-          resourceLimitMemory: "512Mi"
-          resourceRequestCpu: "512m"
-          resourceRequestMemory: "512Mi"
-          workingDir: "/home/jenkins"
-        id: "d591f91bc14f64a22ae985a40af25e183925bcf2934d14c02f9026358a3a047c"
-        label: "jenkins-jenkins-agent"
-        name: "default"
-        nodeUsageMode: NORMAL
-        podRetention: "never"
-        serviceAccount: "default"
-        yamlMergeStrategy: "override"
-  crumbIssuer:
-    standard:
-      excludeClientIPFromCrumb: true
-  disableRememberMe: false
-  disabledAdministrativeMonitors:
-  - "hudson.diagnosis.ReverseProxySetupMonitor"
-  labelAtoms:
-  - name: "master"
-  markupFormatter: "plainText"
-  mode: NORMAL
-  myViewsTabBar: "standard"
-  numExecutors: 0
-  primaryView:
-    all:
-      name: "all"
-  projectNamingStrategy: "standard"
-  quietPeriod: 5
-  remotingSecurity:
-    enabled: true
-  scmCheckoutRetryCount: 0
-  securityRealm:
-    local:
-      allowsSignup: false
-      enableCaptcha: false
-      users:
-      - id: "admin"
-        name: "Jenkins Admin"
-        properties:
-        - "apiToken"
-        - "mailer"
-        - "myView"
-        - preferredProvider:
-            providerId: "default"
-        - "timezone"
-  slaveAgentPort: 50000
-  updateCenter:
-    sites:
-    - id: "default"
-      url: "https://updates.jenkins.io/update-center.json"
-  views:
-  - all:
-      name: "all"
-  viewsTabBar: "standard"
-security:
-  apiToken:
-    creationOfLegacyTokenEnabled: false
-    tokenGenerationOnCreationEnabled: false
-    usageStatisticsEnabled: true
-  sSHD:
-    port: -1
+  systemMessage: "Controlled by Configuration as Code"
+
 unclassified:
-  buildDiscarders:
-    configuredBuildDiscarders:
-    - "jobBuildDiscarder"
-  fingerprints:
-    fingerprintCleanupDisabled: false
-    storage: "file"
-  gitSCM:
-    addGitTagAction: false
-    allowSecondFetch: false
-    createAccountBasedOnEmail: false
-    disableGitToolChooser: false
-    hideCredentials: false
-    showEntireCommitSummaryInChanges: false
-    useExistingAccountWithSameEmail: false
-  junitTestResultStorage:
-    storage: "file"
-  location:
-    adminAddress: "address not configured yet <nobody@nowhere>"
-    url: "http://jenkins:8080/"
-  mailer:
-    charset: "UTF-8"
-    useSsl: false
-    useTls: false
-  pollSCM:
-    pollingThreadCount: 10
-tool:
-  git:
-    installations:
-    - home: "git"
-      name: "Default"
+  shell:
+    shell: "bash"
+  ansibleTowerGlobalConfig:
+    towerInstallation:
+      - enableDebugging: true
+        towerCredentialsId: ansible-tower-jenkins-user  # create these by hand in jenkins
+        towerDisplayName: Infra-Ansible-Tower-01
+        towerTrustCert: true
+        towerURL: https://infra-ansible.example.com
+  globalLibraries:
+    libraries:
+      - defaultVersion: "master"
+        name: "satqe_pipeline_lib"
+        retriever:
+          modernSCM:
+            scm:
+              git:
+                id: "f999d5d7-36af-47d1-95eb-9528eeb2e828"
+                remote: "https://gitlab.example.com/satelliteqe/satelliteqe-jenkins.git"
+                traits:
+                - "gitBranchDiscovery"
+#                  - branchDiscoveryTrait:
+#                      strategyId: 1
