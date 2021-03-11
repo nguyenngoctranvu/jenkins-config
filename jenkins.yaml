@@ -1,10 +1,10 @@
 jenkins:
   systemMessage: "Configured as Code"
-
-jobs:
-  - script: >
-      job('hello-world') {
-        steps {
-          echo "Hello, World!"
+unclassified:
+  jobs:
+    - script: >
+        job('hello-world') {
+          steps {
+            echo "Hello, World!"
+          }
         }
-      }
